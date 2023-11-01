@@ -37,8 +37,8 @@ CSI
 + **CSI size: 600x600x3**
 + **number of class: 2**
 + **classes: close, far away**
-+ **train number set: 60**
-+ **test   number set: 40** 
++ **train number of A, B set: 60**
++ **test   number of A, b set: 40** 
 
 
 ## Run

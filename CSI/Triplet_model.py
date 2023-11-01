@@ -47,7 +47,7 @@ def prepare_siamese_data(base_path, img_size=(600,600)):
 
 
 # Example usage:
-base_path = "./data/train"
+base_path = "./Data/train"
 train_anchor, train_positive, train_negative = prepare_siamese_data(base_path)
 
 train_anchor  = train_anchor.reshape(-1, 600, 600, 3).astype('float32')
@@ -149,7 +149,7 @@ siamese_model.summary()
 
 # Assuming you have a test dataset loader function like before
 # For instance: prepare_siamese_data but for test dataset
-test_base_path = "./data/test"
+test_base_path = "./Data/test"
 test_anchor, test_positive, test_negative = prepare_siamese_data(test_base_path)
 
 test_anchor  = test_anchor.reshape(-1, 600, 600, 3).astype('float32')
@@ -185,7 +185,7 @@ print(f"Accuracy: {accuracy:.2f}")
 print(f"F1 Score: {f1:.2f}")
 
 
-direc_path = './data/confusion_matrix'
+direc_path = './Data/confusion_matrix'
 #computing confusion matrix
 cm = confusion_matrix(true_labels, predicted_labels)
 

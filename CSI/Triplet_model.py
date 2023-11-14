@@ -88,7 +88,7 @@ def Triplet_network(inputshape):
     return model
 
 
-siamese_network = base_network(input_shape)
+triplet_network = Triplet_network(input_shape)
 
 # Siamese network inputs
 input_anchor  = Input(shape=input_shape)
@@ -96,9 +96,9 @@ input_positive = Input(shape=input_shape)
 input_negative = Input(shape=input_shape)
 
 # Apply the siamese network to the inputs
-embedding_anchor  = siamese_network(input_anchor)
-embedding_positive = siamese_network(input_positive)
-embedding_negative = siamese_network(input_negative)
+embedding_anchor  = triplet_network(input_anchor)
+embedding_positive = triplet_network(input_positive)
+embedding_negative = triplet_network(input_negative)
 
 output = Concatenate()([embedding_anchor, embedding_positive,embedding_negative])
 
@@ -115,11 +115,11 @@ def triplet_loss(y_true, y_pred, margin = 1):
 
     return loss
 
-# Siamese network model
-siamese_model = Model(inputs=[input_anchor, input_positive, input_negative], outputs=output )
+# Triplet network model
+triplet_model = Model(inputs=[input_anchor, input_positive, input_negative], outputs=output )
 
 # Compile the model
-siamese_model.compile(loss= triplet_loss, optimizer=Adam(learning_rate=0.00001))
+triplet_model.compile(loss= triplet_loss, optimizer=Adam(learning_rate=0.00001))
 
 # Create labels for the contrastive loss
 #positive_labels = np.ones((train_positive.shape[0], 1))
@@ -129,23 +129,23 @@ dummy_y = np.zeros((train_anchor.shape[0], 128*3))
 
 
 #train the model 
-train_history = siamese_model.fit([train_anchor, train_positive, train_negative], dummy_y,
+train_history = triplet_model.fit([train_anchor, train_positive, train_negative], dummy_y,
                 validation_split=0.2, batch_size = 32, epochs= 200)
 
 #save model
-siamese_model.summary()
+triplet_model.summary()
 
 
 #from tensorflow.keras.models import load_model
 
-# Assuming your model structure is saved in 'siameseCNN_model.h5'
-# and weights in 'siameseCNN_model.weight'
-#model_path = 'siameseCNN_model.h5'
-#weights_path = 'siameseCNN_model.weight'
+# Assuming your model structure is saved in 'tripletCNN_model.h5'
+# and weights in 'tripletCNN_model.weight'
+#model_path = 'tripletCNN_model.h5'
+#weights_path = 'tripletCNN_model.weight'
 
 # Load your trained model
-#siamese_model = load_model(model_path, custom_objects={"triplet_loss": triplet_loss})
-#siamese_model.load_weights(weights_path)
+#triplet_model = load_model(model_path, custom_objects={"triplet_loss": triplet_loss})
+#triplet_model.load_weights(weights_path)
 
 # Assuming you have a test dataset loader function like before
 # For instance: prepare_siamese_data but for test dataset

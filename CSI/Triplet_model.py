@@ -26,7 +26,7 @@ def load_images_from_folder(folder, img_size):
 
 
 #load the respective data and label with anchor, positive, negative
-def prepare_siamese_data(base_path, img_size=(600,600)):
+def prepare_triplet_data(base_path, img_size=(600,600)):
 
     subpaths = ["anchor", "positive", "negative"]
     data = {}
@@ -48,7 +48,7 @@ def prepare_siamese_data(base_path, img_size=(600,600)):
 
 # Example usage:
 base_path = "./Data/train"
-train_anchor, train_positive, train_negative = prepare_siamese_data(base_path)
+train_anchor, train_positive, train_negative = prepare_triplet_data(base_path)
 
 train_anchor  = train_anchor.reshape(-1, 600, 600, 3).astype('float32')
 train_positive = train_positive.reshape(-1, 600, 600, 3).astype('float32')
@@ -90,12 +90,12 @@ def Triplet_network(inputshape):
 
 triplet_network = Triplet_network(input_shape)
 
-# Siamese network inputs
+# Triplet network inputs
 input_anchor  = Input(shape=input_shape)
 input_positive = Input(shape=input_shape)
 input_negative = Input(shape=input_shape)
 
-# Apply the siamese network to the inputs
+# Apply the triplet network to the inputs
 embedding_anchor  = triplet_network(input_anchor)
 embedding_positive = triplet_network(input_positive)
 embedding_negative = triplet_network(input_negative)
@@ -148,9 +148,9 @@ triplet_model.summary()
 #triplet_model.load_weights(weights_path)
 
 # Assuming you have a test dataset loader function like before
-# For instance: prepare_siamese_data but for test dataset
+# For instance: prepare_triplet_data but for test dataset
 test_base_path = "./Data/test"
-test_anchor, test_positive, test_negative = prepare_siamese_data(test_base_path)
+test_anchor, test_positive, test_negative = prepare_triplet_data(test_base_path)
 
 test_anchor  = test_anchor.reshape(-1, 600, 600, 3).astype('float32')
 test_positive = test_positive.reshape(-1, 600, 600, 3).astype('float32')
@@ -158,7 +158,7 @@ test_negative = test_negative.reshape(-1, 600, 600, 3).astype('float32')
 
 
 # Use model to get predictions on test set
-predictions = siamese_model.predict([test_anchor, test_positive, test_negative])
+predictions = triplet_model.predict([test_anchor, test_positive, test_negative])
 anchor, positive, negative = predictions[:, 0:128], predictions[:, 128:256], predictions[:, 256:]
 
 positive_dist = tf.reduce_sum(tf.square(anchor - positive), axis=1)
